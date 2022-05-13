@@ -111,6 +111,24 @@ func (grid *Grid) Merge(subgrid *Grid, gridRow int, gridCol int) {
 	}
 }
 
+func (grid *Grid) Range(fromRow int, fromCol int, rowSize int, colSize int) *Grid {
+	if fromRow+rowSize > grid.Rows || fromCol+colSize > grid.Cols {
+		panic("Range out of bounds")
+	}
+
+	g := New(rowSize, colSize, grid.DomainRules)
+	for i := 0; i < rowSize; i++ {
+		startIndex := fromRow*grid.Cols + fromCol
+		endIndex := startIndex + colSize
+		loop := endIndex - startIndex
+		for j := 0; j < loop; j++ {
+			g.Cells[i*g.Cols+j] = grid.Cells[i*grid.Cols+startIndex+j]
+		}
+	}
+
+	return g
+}
+
 func (grid *Grid) AsArray() []int {
 	var result []int
 	for _, cell := range grid.Cells {

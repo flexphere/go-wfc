@@ -1,5 +1,7 @@
 package grid
 
+import "math"
+
 type Terrain struct {
 	Size  int
 	Rules [][]int
@@ -24,4 +26,18 @@ func (terrain *Terrain) Expand() {
 	grid.Build(1)
 	terrain.Size += 2
 	terrain.Grid = grid
+}
+
+func (terrain *Terrain) Window(fromRow int, fromCol int, rowSize int, colSize int) *Grid {
+	diffRow := fromRow + rowSize - terrain.Grid.Rows
+	diffCol := fromCol + colSize - terrain.Grid.Cols
+
+	if diffRow > 0 || diffCol > 0 {
+		max := math.Max(float64(diffRow), float64(diffCol))
+		for i := 0; i < int(max); i++ {
+			terrain.Expand()
+		}
+	}
+
+	return terrain.Grid.Range(fromRow, fromCol, rowSize, colSize)
 }
