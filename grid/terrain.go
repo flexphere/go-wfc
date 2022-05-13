@@ -1,6 +1,8 @@
 package grid
 
-import "math"
+import (
+	"math"
+)
 
 type Terrain struct {
 	Size  int
@@ -9,14 +11,19 @@ type Terrain struct {
 }
 
 func NewTerrain(size int, rules [][]int) *Terrain {
-	buildStartingIndex := size * size / 2
-	grid := New(size, size, rules)
-	grid.Build(buildStartingIndex)
-	return &Terrain{
-		Size:  size,
+	t := &Terrain{
+		Size:  3,
 		Rules: rules,
-		Grid:  grid,
 	}
+	buildStartingIndex := t.Size * t.Size / 2
+	t.Grid = New(t.Size, t.Size, t.Rules)
+	t.Grid.Build(buildStartingIndex)
+
+	loopCount := int(math.Ceil(float64(size)-float64(t.Size)) / 2)
+	for i := 0; i < loopCount; i++ {
+		t.Expand()
+	}
+	return t
 }
 
 func (terrain *Terrain) Expand() {

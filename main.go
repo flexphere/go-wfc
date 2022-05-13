@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"wfc/grid"
 	"wfc/timer"
 )
@@ -10,7 +9,6 @@ import (
 func main() {
 	timer.Start("Main")
 
-	terrainSize := 3.0
 	rules := [][]int{
 		{0, 1},
 		{0, 1, 2},
@@ -20,16 +18,10 @@ func main() {
 		{4, 5},
 	}
 
-	t := grid.NewTerrain(int(terrainSize), rules)
-
-	targetSize := 256.0
-	loopCount := int(math.Ceil(targetSize-terrainSize) / 2)
-
-	for i := 0; i < loopCount; i++ {
-		fmt.Printf("%d/%d\r", i, loopCount)
-		t.Expand()
-	}
+	t := grid.NewTerrain(256, rules)
+	// g := t.Window(0, 8, 3, 3)
+	// t.Grid.Print()
+	// g.Print()
 	timer.End("Main")
-
 	fmt.Printf("rows:%d cols:%d total:%d\n", t.Grid.Rows, t.Grid.Cols, t.Grid.TotalCells)
 }
